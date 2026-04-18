@@ -173,11 +173,11 @@ builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
 builder.Services.AddValidatorsFromAssembly(typeof(Shopfinity.Application.Features.Carts.DTOs.AddToCartDto).Assembly);
 
-// ── Health Checks ─────────────────────────────────────────────────────────────
+// ── Health Checks ────────────────────────────────────────
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection")!);
 
-// ── API Controllers + Validation ──────────────────────────────────────────────
+// ── API Controllers + Validation ────────────────────
 builder.Services.AddControllers()
     .AddJsonOptions(o =>
     {
@@ -206,7 +206,7 @@ builder.Services.AddControllers()
 
 builder.Services.AddOpenApi();
 
-// ── API Versioning ────────────────────────────────────────────────────────────
+// ── API Versioning ─────────────────────────────────
 builder.Services.AddApiVersioning(options =>
 {
     options.DefaultApiVersion            = new ApiVersion(1, 0);
@@ -214,7 +214,7 @@ builder.Services.AddApiVersioning(options =>
     options.ReportApiVersions            = true;
 });
 
-// ── Request Timeouts (ASP.NET 8+) ─────────────────────────────────────────────
+// ── Request Timeouts (ASP.NET 8+) ────────────────────────────
 builder.Services.AddRequestTimeouts(options =>
 {
     options.DefaultPolicy = new Microsoft.AspNetCore.Http.Timeouts.RequestTimeoutPolicy
@@ -226,7 +226,7 @@ builder.Services.AddRequestTimeouts(options =>
     options.AddPolicy("AuthTimeout", TimeSpan.FromSeconds(10));
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();
@@ -238,7 +238,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-// ── CORS must be before auth ─────────────────────────────────────────────────
+// ── CORS must be before auth ──────────────
 app.UseCors("FrontendPolicy");
 
 app.UseResponseCompression();
@@ -261,7 +261,7 @@ app.UseMiddleware<Shopfinity.API.Middleware.CsrfValidationMiddleware>();
 
 app.MapControllers();
 
-// ── Health Check endpoint ─────────────────────────────────────────────────────
+// ── Health Check endpoint ─────────────────────
 app.MapHealthChecks("/health", new HealthCheckOptions
 {
     ResponseWriter = async (ctx, report) =>
